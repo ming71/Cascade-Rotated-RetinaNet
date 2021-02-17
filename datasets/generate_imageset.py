@@ -46,17 +46,24 @@ def generate_imagets(dataset, ROOT_dir):
                 if extension in ['.jpg', '.bmp','.png']:
                     f.write(os.path.join(file)+'\n')
 
-    elif dataset in ['IC13', 'GaoFenShip']:
+    elif dataset in ['IC13', 'IC15', 'GaoFenShip']:
         # For IC13
-        train_img_dir =  os.path.join(ROOT_dir, "ICDAR13/train/images" )
-        val_img_dir =  os.path.join(ROOT_dir, "ICDAR13/val/images" )
-        trainset =  os.path.join(ROOT_dir, 'ICDAR13/train.txt')
-        valset =  os.path.join(ROOT_dir, 'ICDAR13/test.txt')
+        # train_img_dir =  os.path.join(ROOT_dir, "ICDAR13/train/images" )
+        # val_img_dir =  os.path.join(ROOT_dir, "ICDAR13/val/images" )
+        # trainset =  os.path.join(ROOT_dir, 'ICDAR13/train.txt')
+        # valset =  os.path.join(ROOT_dir, 'ICDAR13/test.txt')
+
+        # For IC15
+        train_img_dir =  os.path.join(ROOT_dir, "ICDAR15/train" )
+        val_img_dir =  os.path.join(ROOT_dir, "ICDAR15/val" )
+        trainset =  os.path.join(ROOT_dir, 'ICDAR15/train.txt')
+        valset =  os.path.join(ROOT_dir, 'ICDAR15/test.txt')       
+
         # For GaoFenShip
-        train_img_dir =  os.path.join(ROOT_dir, "data/ship/train" )
-        val_img_dir =  os.path.join(ROOT_dir, "data/ship/val" )
-        trainset =  os.path.join(ROOT_dir, 'data/ship/train.txt')
-        valset =  os.path.join(ROOT_dir, 'data/ship/test.txt')
+        # train_img_dir =  os.path.join(ROOT_dir, "data/ship/train" )
+        # val_img_dir =  os.path.join(ROOT_dir, "data/ship/val" )
+        # trainset =  os.path.join(ROOT_dir, 'data/ship/train.txt')
+        # valset =  os.path.join(ROOT_dir, 'data/ship/test.txt')
 
         for set_file, im_dir in zip([trainset, valset], [train_img_dir, val_img_dir]):
             with open(set_file,'w') as f:
@@ -72,19 +79,27 @@ def generate_imagets(dataset, ROOT_dir):
 
     
     elif  dataset in ['HRSC2016', 'UCAS_AOD', 'VOC', 'NWPU_VHR']:
+        # root_dir = 'NWPU_VHR' 
         # trainset = os.path.join(ROOT_dir,'NWPU_VHR/ImageSets/train.txt')
         # valset   =  os.path.join(ROOT_dir, 'NWPU_VHR/ImageSets/test.txt')
         # testset   =  os.path.join(ROOT_dir, 'NWPU_VHR/ImageSets/test.txt')
         # img_dir =  os.path.join(ROOT_dir, 'NWPU_VHR/AllImages')
         # label_dir =  os.path.join(ROOT_dir, 'NWPU_VHR/Annotations')
-        # root_dir = 'NWPU_VHR' 
 
+        root_dir = 'HRSC2016' 
         trainset = os.path.join(ROOT_dir,'HRSC2016/ImageSets/train.txt')
         valset   =  os.path.join(ROOT_dir, 'HRSC2016/ImageSets/test.txt')
         testset   =  os.path.join(ROOT_dir, 'HRSC2016/ImageSets/test.txt')
         img_dir =  os.path.join(ROOT_dir, 'HRSC2016/FullDataSet/AllImages')
         label_dir =  os.path.join(ROOT_dir, 'HRSC2016/FullDataSet/Annotations')
-        root_dir = 'HRSC2016' 
+
+        # root_dir = 'UCAS_AOD' 
+        # trainset = os.path.join(ROOT_dir,'UCAS_AOD/ImageSets/train.txt')
+        # valset   =  os.path.join(ROOT_dir, 'UCAS_AOD/ImageSets/test.txt')
+        # testset   =  os.path.join(ROOT_dir, 'UCAS_AOD/ImageSets/test.txt')
+        # img_dir =  os.path.join(ROOT_dir, 'UCAS_AOD/AllImages')
+        # label_dir =  os.path.join(ROOT_dir, 'UCAS_AOD/Annotations')
+
 
         for dataset in [trainset, valset, testset]:
             with open(dataset,'r') as f:
@@ -98,7 +113,7 @@ def generate_imagets(dataset, ROOT_dir):
 
 
 if __name__ == '__main__':
-    DATASET = 'HRSC2016'
+    DATASET = 'IC15'
     ROOT_dir = '/data-input/Rotated-Cascade-RetinaNet'
     generate_imagets(DATASET, ROOT_dir)
 
