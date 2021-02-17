@@ -39,12 +39,10 @@ def convert_icdar_gt(gt_path):
 
 
 # if __name__ == "__main__":
-    
-#     det_path = '/py/BoxesCascade/test/detetions'     # 检测输出结果文件夹
-#     gt_path = '/py/BoxesCascade/ICDAR15/test' # 给定的gt文件夹
+    ROOT_dir = '/data-input/RIDet2'
+    gt_path = os.path.join(ROOT_dir, 'ICDAR15/test.txt') 
 
-# #    convert_detections(det_path)
-#     convert_icdar_gt(gt_path)
+    convert_icdar_gt(gt_path)
 
     
 

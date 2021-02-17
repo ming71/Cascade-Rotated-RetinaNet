@@ -34,8 +34,9 @@ def convert_ucas_gt(gt_path, dst_path):
 
 
 if __name__ == "__main__":
-    gt_path = '/data-input/das_dota/UCAS_AOD/test.txt' 
-    dst_path = '/data-input/Rotated-Cascade-RetinaNet/datasets/evaluate/ground-truth'
+    ROOT_dir = '/data-input/RIDet2'
+    gt_path = os.path.join(ROOT_dir, 'UCAS_AOD/test.txt') 
+    dst_path = os.path.join(ROOT_dir, 'datasets/evaluate/ground-truth') 
 
     convert_ucas_gt(gt_path, dst_path)
 

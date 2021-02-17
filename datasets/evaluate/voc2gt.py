@@ -64,8 +64,9 @@ def convert_voc_gt(gt_path, dst_path, eval_difficult= False):
 
 
 if __name__ == "__main__":
-    gt_path = '/data-input/das_dota/VOC2007/ImageSets/Main/test.txt' # 给定的测试imgset文件
-    dst_path = '/data-input/das_dota/datasets/evaluate/ground-truth'
+    ROOT_dir = '/data-input/RIDet2'
+    gt_path = os.path.join(ROOT_dir, 'VOC2007/ImageSets/Main/test.txt') 
+    dst_path = os.path.join(ROOT_dir, 'datasets/evaluate/ground-truth') 
 
     eval_difficult = False
     convert_voc_gt(gt_path, dst_path, eval_difficult)

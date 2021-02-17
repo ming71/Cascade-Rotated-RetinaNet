@@ -40,8 +40,9 @@ def convert_nwpu_gt(gt_path, dst_path):
 
 
 if __name__ == "__main__":
-    gt_path = '/data-input/das_dota/NWPU_VHR/test.txt' 
-    dst_path = '/data-input/das_dota/datasets/evaluate/ground-truth'
+    ROOT_dir = '/data-input/RIDet2'
+    gt_path = os.path.join(ROOT_dir, 'NWPU_VHR/test.txt') 
+    dst_path = os.path.join(ROOT_dir, 'datasets/evaluate/ground-truth') 
 
     convert_nwpu_gt(gt_path, dst_path)
 
