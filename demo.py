@@ -23,7 +23,8 @@ DATASETS = {'VOC' : VOCDataset ,
             'HRSC2016': HRSCDataset,
             'DOTA':DOTADataset,
             'UCAS_AOD':UCAS_AODDataset,
-            'NWPU_VHR':NWPUDataset
+            'NWPU_VHR':NWPUDataset,
+            'MSRA_TD500':MSRA_TD500Dataset
             }
 
 def generate_colors(dataset):
@@ -33,7 +34,8 @@ def generate_colors(dataset):
             'HRSC2016': 1,
             'DOTA':15,
             'UCAS_AOD':2,
-            'NWPU_VHR':10
+            'NWPU_VHR':10,
+            'MSRA_TD500':1
             }
     if num_colors[dataset] == 1:
         colors = [(0, 255, 0)]
@@ -79,7 +81,7 @@ def demo(args):
                 else:
                     pts = np.array([rbox_2_quad(bbox[:5]).reshape((4, 2))], dtype=np.int32)
                     cv2.drawContours(src, pts, 0, thickness=2, color=colors[int(cls-1)])
-                    put_label = True
+                    put_label = False
                     plot_anchor = False
                     if put_label:
                         label = ds.return_class(cls) + str(' %.2f' % scores)
@@ -129,7 +131,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Hyperparams')
     parser.add_argument('--backbone', type=str, default='res50')
     parser.add_argument('--hyp', type=str, default='hyp.py', help='hyper-parameter path')
-    parser.add_argument('--weight', type=str, default='weights/last.pth')
+    parser.add_argument('--weight', type=str, default='weights/pretrain_9a.pth')
     # HRSC
     # parser.add_argument('--dataset', type=str, default='HRSC2016')    
     # parser.add_argument('--ims_dir', type=str, default='HRSC2016/Test') 
@@ -137,16 +139,17 @@ if __name__ == '__main__':
     # parser.add_argument('--dataset', type=str, default='DOTA')
     # parser.add_argument('--ims_dir', type=str, default='DOTA/test')
     # UCAS-AOD
-    parser.add_argument('--dataset', type=str, default='UCAS_AOD')
-    parser.add_argument('--ims_dir', type=str, default='UCAS_AOD/Test')  
+    # parser.add_argument('--dataset', type=str, default='UCAS_AOD')
+    # parser.add_argument('--ims_dir', type=str, default='UCAS_AOD/Test')  
     # IC13
     # parser.add_argument('--dataset', type=str, default='IC13')
     # parser.add_argument('--ims_dir', type=str, default='ICDAR13/test')
-    # NWPU
-    # parser.add_argument('--dataset', type=str, default='HRSC2016')
-    # parser.add_argument('--ims_dir', type=str, default='HRSC2016/Test')   
-    
-
+    # IC15
+    # parser.add_argument('--dataset', type=str, default='IC15')
+    # parser.add_argument('--ims_dir', type=str, default='ICDAR15/test')
+    # MSRA-TD500
+    parser.add_argument('--dataset', type=str, default='MSRA_TD500')
+    parser.add_argument('--ims_dir', type=str, default='MSRA_TD500/Test')
 
 
     parser.add_argument('--target_size', type=int, default=[800])

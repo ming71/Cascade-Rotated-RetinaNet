@@ -4,7 +4,7 @@ import glob
 from PIL import Image
 from tqdm import tqdm
 
-DATASETS = ['IC15', 'IC13',
+DATASETS = ['IC15', 'IC13', 'MSRA_TD500',
             'HRSC2016', 'DOTA', 'UCAS_AOD', 'NWPU_VHR' ,
             'GaoFenShip', 'GaoFenAirplane', 
             'VOC']
@@ -46,7 +46,7 @@ def generate_imagets(dataset, ROOT_dir):
                 if extension in ['.jpg', '.bmp','.png']:
                     f.write(os.path.join(file)+'\n')
 
-    elif dataset in ['IC13', 'IC15', 'GaoFenShip']:
+    elif dataset in ['IC13', 'IC15', 'MSRA_TD500', 'GaoFenShip']:
         # For IC13
         # train_img_dir =  os.path.join(ROOT_dir, "ICDAR13/train/images" )
         # val_img_dir =  os.path.join(ROOT_dir, "ICDAR13/val/images" )
@@ -54,10 +54,16 @@ def generate_imagets(dataset, ROOT_dir):
         # valset =  os.path.join(ROOT_dir, 'ICDAR13/test.txt')
 
         # For IC15
-        train_img_dir =  os.path.join(ROOT_dir, "ICDAR15/train" )
-        val_img_dir =  os.path.join(ROOT_dir, "ICDAR15/val" )
-        trainset =  os.path.join(ROOT_dir, 'ICDAR15/train.txt')
-        valset =  os.path.join(ROOT_dir, 'ICDAR15/test.txt')       
+        # train_img_dir =  os.path.join(ROOT_dir, "ICDAR15/train" )
+        # val_img_dir =  os.path.join(ROOT_dir, "ICDAR15/val" )
+        # trainset =  os.path.join(ROOT_dir, 'ICDAR15/train.txt')
+        # valset =  os.path.join(ROOT_dir, 'ICDAR15/test.txt')
+
+        # For MSRA_TD500
+        train_img_dir =  os.path.join(ROOT_dir, "MSRA_TD500/train" )
+        val_img_dir =  os.path.join(ROOT_dir, "MSRA_TD500/test" )
+        trainset =  os.path.join(ROOT_dir, 'MSRA_TD500/train.txt')
+        valset =  os.path.join(ROOT_dir, 'MSRA_TD500/test.txt')         
 
         # For GaoFenShip
         # train_img_dir =  os.path.join(ROOT_dir, "data/ship/train" )
@@ -71,6 +77,8 @@ def generate_imagets(dataset, ROOT_dir):
                     files = glob.glob(os.path.join(im_dir, '**.jpg*' ))
                 elif dataset == 'GaoFenShip':
                     files = glob.glob(os.path.join(im_dir, '**.tiff*' ))
+                elif dataset == 'MSRA_TD500':
+                    files = glob.glob(os.path.join(im_dir, '**.JPG*' ))
                 else:
                     raise NotImplementedError
                 for file in files:
@@ -113,7 +121,7 @@ def generate_imagets(dataset, ROOT_dir):
 
 
 if __name__ == '__main__':
-    DATASET = 'IC15'
+    DATASET = 'MSRA_TD500'
     ROOT_dir = '/data-input/Rotated-Cascade-RetinaNet'
     generate_imagets(DATASET, ROOT_dir)
 

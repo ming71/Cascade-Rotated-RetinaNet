@@ -1,6 +1,6 @@
 # Cascade-Rotated-RetinaNet
 
-The codes build rotated cascade retinanet for arbitrary-oriented object detection. It supports the following datasets: DOTA, HRSC2016, ICDAR2013, ICDAR2015, UCAS-AOD, NWPU VHR-10, VOC2007. 
+The codes build rotated cascade retinanet for arbitrary-oriented object detection. It supports the following datasets: DOTA, HRSC2016, ICDAR2013, ICDAR2015, UCAS-AOD, NWPU VHR-10, VOC2007, MSRA-TD500. 
 
 ## Getting Started
 ### Installation

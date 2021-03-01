@@ -28,7 +28,8 @@ DATASETS = {'VOC' : VOCDataset ,
             'HRSC2016': HRSCDataset,
             'DOTA':DOTADataset,
             'UCAS_AOD':UCAS_AODDataset,
-            'NWPU_VHR':NWPUDataset
+            'NWPU_VHR':NWPUDataset,
+            'MSRA_TD500':MSRA_TD500Dataset
             }
 
 def make_zip(source_dir, output_filename):
@@ -105,6 +106,60 @@ def icdar_evaluate(model,
 
 
 
+def msra_evaluate(model, 
+                   target_size, 
+                   test_path, 
+                   dataset):
+    output = './datasets/MSRA_eval'
+
+    f = open(test_path)
+    ims_list = f.readlines()
+    f.close()
+    out_dir = './temp'
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+    
+    s = ('%20s' + '%10s' * 6) % ('Class', 'Images', 'Targets', 'P', 'R', 'mAP@0.5', 'Hmean')
+    nt = 0
+    for idx, line in enumerate(tqdm(ims_list, desc=s)):
+        im_path = line.strip()
+        im_name = os.path.split(im_path)[1]
+        # import ipdb;ipdb.set_trace()
+        im = cv2.cvtColor(cv2.imread(im_path, cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
+        dets = im_detect(model, im, target_sizes=target_size)
+        nt += len(dets)
+        out_file = os.path.join(out_dir, 'res_img_' + im_name.strip('IMG_').strip('.JPG') + '.txt')
+        with codecs.open(out_file, 'w', 'utf-8') as f:
+            if dets.shape[0] == 0:
+                continue
+            res = sort_corners(rbox_2_quad(dets[:, 2:]))
+            for k in range(dets.shape[0]):
+                f.write('{:.0f},{:.0f},{:.0f},{:.0f},{:.0f},{:.0f},{:.0f},{:.0f}\n'.format(
+                    res[k, 0], res[k, 1], res[k, 2], res[k, 3],
+                    res[k, 4], res[k, 5], res[k, 6], res[k, 7])
+                )
+    
+    zip_name = 'submit.zip'
+    make_zip(out_dir, zip_name)
+    shutil.move(os.path.join('./', zip_name), os.path.join(output, zip_name))
+    if os.path.exists(out_dir):
+        shutil.rmtree(out_dir)
+    result = os.popen('cd {0} && python script.py -g=gt.zip -s=submit.zip '.format(output)).read()
+    sep = result.split(':')
+    precision = sep[1][:sep[1].find(',')].strip()
+    recall = sep[2][:sep[2].find(',')].strip()
+    f1 = sep[3][:sep[3].find(',')].strip()
+    map = 0
+    p = eval(precision)
+    r = eval(recall)
+    hmean = eval(f1)
+    # display result
+    pf = '%20s' + '%10.3g' * 6  # print format
+    print(pf % ('all', len(ims_list), nt, p, r, 0, hmean))
+    return p, r, map, hmean 
+
+
+
 def data_evaluate(model, 
                   target_size, 
                   test_path,
@@ -144,7 +199,7 @@ def data_evaluate(model,
                     res[k, 4], res[k, 5], res[k, 6], res[k, 7])
                 )
         assert len(os.listdir(os.path.join(root_dir,'ground-truth'))) != 0, 'No labels found in test/ground-truth!! '
-    mAP = eval_mAP(root_dir, use_07_metric=False)
+    mAP = eval_mAP(root_dir, use_07_metric=True)
     # display result
     pf = '%20s' + '%10.3g' * 6  # print format    
     print(pf % ('all', len(ims_list), nt, 0, 0, mAP, 0))
@@ -212,7 +267,7 @@ def evaluate(target_size,
              weight=None, 
              model=None,
              hyps=None,
-             conf=0.3):
+             conf=0.05):
     if model is None:
         model = RetinaNet(backbone=backbone,hyps=hyps)
         if weight.endswith('.pth'):
@@ -227,8 +282,10 @@ def evaluate(target_size,
     if torch.cuda.is_available():
         model.cuda()
 
-    if 'IC' in dataset :
+    if  dataset in ['IC15', 'IC13']:
         results = icdar_evaluate(model, target_size, test_path, dataset)
+    elif dataset == 'MSRA_TD500':
+        results = msra_evaluate(model, target_size, test_path, dataset)
     elif dataset in ['HRSC2016', 'UCAS_AOD', 'VOC', 'NWPU_VHR']:
         results = data_evaluate(model, target_size, test_path, conf, dataset)
     elif dataset == 'DOTA':
@@ -241,12 +298,15 @@ def evaluate(target_size,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Hyperparams')
     parser.add_argument('--backbone', dest='backbone', default='res50', type=str)
-    parser.add_argument('--weight', type=str, default='weights/best.pth')
-    parser.add_argument('--target_size', dest='target_size', default=[416], type=int) 
+    parser.add_argument('--weight', type=str, default='weights/deploy60.pth')
+    parser.add_argument('--target_size', dest='target_size', default=[800], type=int) 
     parser.add_argument('--hyp', type=str, default='hyp.py', help='hyper-parameter path')
 
-    parser.add_argument('--dataset', nargs='?', type=str, default='HRSC2016')    
-    parser.add_argument('--test_path', nargs='?', type=str, default='HRSC2016/test.txt')
+    # parser.add_argument('--dataset', nargs='?', type=str, default='HRSC2016')    
+    # parser.add_argument('--test_path', nargs='?', type=str, default='HRSC2016/test.txt')
+
+    parser.add_argument('--dataset', nargs='?', type=str, default='MSRA_TD500')    
+    parser.add_argument('--test_path', nargs='?', type=str, default='MSRA_TD500/test.txt')
 
     # parser.add_argument('--dataset', nargs='?', type=str, default='DOTA')    
     # parser.add_argument('--test_path', nargs='?', type=str, default='DOTA/val')

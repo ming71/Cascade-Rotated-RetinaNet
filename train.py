@@ -31,8 +31,10 @@ DATASETS = {'VOC' : VOCDataset ,
             'HRSC2016': HRSCDataset,
             'DOTA':DOTADataset,
             'UCAS_AOD':UCAS_AODDataset,
-            'NWPU_VHR':NWPUDataset
+            'NWPU_VHR':NWPUDataset,
+            'MSRA_TD500':MSRA_TD500Dataset
             }
+
 
 
 def train_model(args, hyps):
@@ -282,6 +284,12 @@ if __name__ == '__main__':
     # parser.add_argument('--dataset', type=str, default='NWPU_VHR')
     # parser.add_argument('--train_path', type=str, default='NWPU_VHR/train.txt')
     # parser.add_argument('--test_path', type=str, default='NWPU_VHR/test.txt')
+
+    # MSRA-TD500
+    # parser.add_argument('--dataset', type=str, default='MSRA_TD500')
+    # parser.add_argument('--train_path', type=str, default='MSRA_TD500/train.txt')
+    # parser.add_argument('--test_path', type=str, default='MSRA_TD500/test.txt')
+
 
     parser.add_argument('--training_size', type=int, default=416)
     parser.add_argument('--resume', action='store_true', help='resume training from last.pth')

@@ -5,4 +5,5 @@ from .hrsc_dataset import HRSCDataset
 from .dota_dataset import DOTADataset
 from .ucas_aod_dataset import UCAS_AODDataset
 from .nwpu_vhr_dataset import NWPUDataset
+from .msra_td500_dataset import MSRA_TD500Dataset
 
